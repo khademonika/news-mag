@@ -1,0 +1,10 @@
+.pointer {
+  cursor: pointer;
+  transition: all ; 
+}
+.pointer:hover{
+  text-decoration: underline;             
+  text-decoration-thickness: 2px;  
+}
+
+
