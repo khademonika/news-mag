@@ -3,17 +3,31 @@ import NewsItem from './NewsItem';
 
 function NewsBoard({ category }) {
   const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+
+  // useEffect(() => {
+  //   let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${import.meta.env.VITE_API_KEY}`;
+  //   fetch(url)
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       if (data.articles) {
+  //         setArticles(data.articles);
+  //       }
+  //     });
+  // }, [category]);
+
+useEffect(() => {
     let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${import.meta.env.VITE_API_KEY}`;
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        if (data.articles) {
-          setArticles(data.articles);
-        }
-      });
-  }, [category]);
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      setArticles(data.articles || []);
+      setLoading(false);
+    });
+}, [category]);
+
 
   return (
     <div className="px-4 py-6">
@@ -22,19 +36,12 @@ function NewsBoard({ category }) {
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {articles.length > 0 ? (
-          articles.map((news, i) => (
-            <NewsItem
-              key={i}
-              title={news.title}
-              description={news.description}
-              src={news.urlToImage}
-              url={news.url}
-            />
-          ))
-        ) : (
-          <p className="col-span-full text-center text-gray-400">No news articles found.</p>
-        )}
+{loading ? <p>Loading...</p> :
+  Array.isArray(articles) && articles.map((news, i) => (
+    <NewsItem key={i} title={news.title} description={news.description} src={news.urlToImage} url={news.url} />
+))}
+
+          
       </div>
     </div>
   );
