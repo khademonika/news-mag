@@ -18,14 +18,30 @@ function NewsBoard({ category }) {
   // }, [category]);
 
 useEffect(() => {
-    let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${import.meta.env.VITE_API_KEY}`;
+  setLoading(true);
+  const apiKey = import.meta.env.VITE_API_KEY;
+
+  if (!apiKey) {
+    console.error("API key is missing!");
+    setLoading(false);
+    return;
+  }
+
+  const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}`;
 
   fetch(url)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      return res.json();
+    })
     .then(data => {
       setArticles(data.articles || []);
-      setLoading(false);
-    });
+    })
+    .catch(err => {
+      console.error("Failed to fetch news:", err);
+      setArticles([]);
+    })
+    .finally(() => setLoading(false));
 }, [category]);
 
 
