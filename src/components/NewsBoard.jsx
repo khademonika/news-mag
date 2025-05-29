@@ -27,7 +27,9 @@ useEffect(() => {
     return;
   }
 
-  const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}`;
+  // const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}`;
+  const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=c5cc658eeb70482fb895e0dce625dd69`;
+
 
   fetch(url)
     .then(res => {
